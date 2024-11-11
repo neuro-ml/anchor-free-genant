@@ -41,6 +41,19 @@ def stack_segments(vertebrae):
     return np.array([x['segments'] for x in vertebrae])
 
 
+def classify_severity(segments):
+    """
+    Get the severity index for a given vertebra's segments.
+    0 - Normal
+    1 - Mild
+    2 - Moderate
+    3 - Severe
+    """
+    norms = np.linalg.norm(np.diff(segments, axis=1), axis=-1)
+    genant = norms.min() / norms.max()
+    return (genant <= [0.6, 0.74, 0.8]).sum()
+
+
 def choose_sagittal(annotation):
     """Choose the sagittal index on which the annotation is best visible."""
     indices = []
